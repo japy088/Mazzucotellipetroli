@@ -99,6 +99,12 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (selectedProducts.includes('Gasolio')) {
+      setSelectedProducts(prev => prev.filter(p => p !== 'Gasolio'));
+    }
+  }, [selectedProducts]);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -390,7 +396,7 @@ function App() {
               </p>
               <div className="space-y-3 mb-6 flex-grow flex flex-col items-center">
                 <div className="inline-block text-left">
-                  {['Pellet', 'Gas in bombole', 'Gasolio (fusti da 20 litri)'].map((item) => (
+                  {['Pellet', 'Gas in bombole', 'Gasolio'].map((item) => (
                     <div key={item} className="flex items-center gap-3 mb-3 last:mb-0">
                       <div className="w-1.5 h-1.5 bg-blue-700 rounded-full shrink-0" />
                       <span className="text-gray-700 text-sm">{item}</span>
@@ -829,7 +835,7 @@ function App() {
                     <div>
                       <label className="block text-sm font-bold text-gray-900 mb-3">Seleziona Prodotti (Scelta Multipla)</label>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        {['Pellet', 'Gas in bombole', 'Gasolio (Fusti da 20 lt)'].map((product) => (
+                        {['Pellet', 'Gas in bombole'].map((product) => (
                           <label key={product} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-300 cursor-pointer hover:border-blue-600 transition-all group">
                             <input
                               type="checkbox"
