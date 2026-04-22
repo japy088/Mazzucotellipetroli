@@ -1,3 +1,13 @@
+@font-face {
+  font-family: "Torcao Condensed";
+  src:
+    url("/fonts/TorcaoCondensed-ExtraBoldItalic.woff2") format("woff2"),
+    url("/fonts/TorcaoCondensed-ExtraBoldItalic.woff") format("woff");
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

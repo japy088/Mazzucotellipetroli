@@ -129,10 +129,18 @@ function App() {
               <div className="w-12 h-12 rounded-full bg-white border-2 border-black overflow-hidden flex items-center justify-center shadow-lg">
                 <img src="/logo.png" alt="Mazzucotelli Petroli Logo" className="w-full h-full object-cover" />
               </div>
-              <div>
-                <h1 className={`text-xl font-bold ${isScrolled ? 'text-white' : 'text-white'}`}>
-                  MAZZUCOTELLI
-                </h1>
+              <div className="flex flex-col leading-none">
+                <div className="h-6 sm:h-7 max-w-[200px]">
+                  <img
+                    src="/font-preview.png"
+                    alt="Mazzucotelli"
+                    className="h-full w-auto object-contain"
+                    style={{
+                      filter:
+                        'drop-shadow(1px 0 0 rgba(255,255,255,0.4)) drop-shadow(-1px 0 0 rgba(255,255,255,0.4)) drop-shadow(0 1px 0 rgba(255,255,255,0.4)) drop-shadow(0 -1px 0 rgba(255,255,255,0.4))',
+                    }}
+                  />
+                </div>
                 <p className={`text-xs font-medium tracking-wider ${isScrolled ? 'text-blue-400' : 'text-blue-300'}`}>
                   PETROLI
                 </p>
@@ -219,8 +227,18 @@ function App() {
           </Reveal>
 
           <Reveal delayMs={80}>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              MAZZUCOTELLI{' '}
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight flex flex-row items-center justify-center gap-2 sm:gap-4">
+              <span className="inline-block">
+                <img
+                  src="/font-preview.png"
+                  alt="Mazzucotelli"
+                  className="h-12 md:h-16 lg:h-20 w-auto max-w-[85vw] object-contain"
+                  style={{
+                    filter:
+                      'drop-shadow(2px 0 0 rgba(255,255,255,0.4)) drop-shadow(-2px 0 0 rgba(255,255,255,0.4)) drop-shadow(0 2px 0 rgba(255,255,255,0.4)) drop-shadow(0 -2px 0 rgba(255,255,255,0.4))',
+                  }}
+                />
+              </span>
               <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
                 PETROLI
               </span>
