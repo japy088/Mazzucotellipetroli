@@ -1841,32 +1841,6 @@ function App() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative flex items-center justify-center px-4 py-3 border-b border-gray-200">
-              <div className="absolute left-4 flex items-center gap-2 sm:hidden">
-                <button
-                  type="button"
-                  onClick={() => setImageZoom(z => Math.max(1, Math.round((z - 0.25) * 100) / 100))}
-                  className="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors text-sm font-semibold text-gray-700"
-                  aria-label={t('modal_zoom_out')}
-                >
-                  -
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setImageZoom(1)}
-                  className="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors text-sm font-semibold text-gray-700"
-                >
-                  100%
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setImageZoom(z => Math.min(4, Math.round((z + 0.25) * 100) / 100))}
-                  className="px-3 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors text-sm font-semibold text-gray-700"
-                  aria-label={t('modal_zoom_in')}
-                >
-                  +
-                </button>
-              </div>
-
               <div className="font-bold text-gray-900 text-center px-12 sm:px-24 text-base sm:text-lg">
                 <div className="leading-tight">
                   <div>{t('year_modal_title').replace('{year}', String(selectedYear))}</div>
