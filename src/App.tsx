@@ -198,6 +198,9 @@ Infine presso quest’azienda sono disponibili bombole di gas per l’utilizzo d
     privacy_accept_suffix: '.',
     privacy_error: 'Devi accettare l’Informativa Privacy per inviare la richiesta.',
     send_request: 'Invia Richiesta',
+    quote_sending: 'Invio in corso...',
+    quote_success: 'Richiesta inviata correttamente.',
+    quote_error: 'Errore durante l’invio.',
     reply_time: 'Risponderemo entro 24 ore lavorative',
     map_title: 'Posizione Mazzucotelli Petroli',
     footer_tagline: 'Trasporti sicuri dal 1966',
@@ -377,6 +380,9 @@ Infine presso quest’azienda sono disponibili bombole di gas per l’utilizzo d
     privacy_accept_suffix: '.',
     privacy_error: 'You must accept the Privacy Notice to send the request.',
     send_request: 'Send Request',
+    quote_sending: 'Sending...',
+    quote_success: 'Request sent successfully.',
+    quote_error: 'Error while sending.',
     reply_time: 'We will reply within 24 business hours',
     map_title: 'Mazzucotelli Petroli location',
     footer_tagline: 'Safe transport since 1966',
@@ -555,6 +561,9 @@ Infine presso quest’azienda sono disponibili bombole di gas per l’utilizzo d
     privacy_accept_suffix: '.',
     privacy_error: 'Vous devez accepter la notice de confidentialité pour envoyer la demande.',
     send_request: 'Envoyer la demande',
+    quote_sending: 'Envoi en cours...',
+    quote_success: 'Demande envoyée avec succès.',
+    quote_error: 'Erreur lors de l’envoi.',
     reply_time: 'Nous répondrons sous 24 heures ouvrées',
     map_title: 'Localisation Mazzucotelli Petroli',
     footer_tagline: 'Transports sécurisés depuis 1966',
@@ -734,6 +743,9 @@ Infine presso quest’azienda sono disponibili bombole di gas per l’utilizzo d
     privacy_accept_suffix: ' gelesen und akzeptiere sie.',
     privacy_error: 'Sie müssen die Datenschutzhinweise akzeptieren, um die Anfrage zu senden.',
     send_request: 'Anfrage senden',
+    quote_sending: 'Wird gesendet...',
+    quote_success: 'Anfrage erfolgreich gesendet.',
+    quote_error: 'Fehler beim Senden.',
     reply_time: 'Wir antworten innerhalb von 24 Werktagsstunden',
     map_title: 'Standort Mazzucotelli Petroli',
     footer_tagline: 'Sichere Transporte seit 1966',
@@ -913,6 +925,9 @@ Infine presso quest’azienda sono disponibili bombole di gas per l’utilizzo d
     privacy_accept_suffix: '.',
     privacy_error: 'Debes aceptar la informativa de privacidad para enviar la solicitud.',
     send_request: 'Enviar solicitud',
+    quote_sending: 'Enviando...',
+    quote_success: 'Solicitud enviada correctamente.',
+    quote_error: 'Error al enviar.',
     reply_time: 'Responderemos en 24 horas laborables',
     map_title: 'Ubicación Mazzucotelli Petroli',
     footer_tagline: 'Transportes seguros desde 1966',
@@ -1057,6 +1072,8 @@ function App() {
   const [legalDoc, setLegalDoc] = useState<LegalDoc | null>(null);
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [privacyConsentTouched, setPrivacyConsentTouched] = useState(false);
+  const [quoteStatus, setQuoteStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [quoteError, setQuoteError] = useState<string | null>(null);
 
   const todayMinDate = (() => {
     const now = new Date();
@@ -1144,6 +1161,70 @@ function App() {
     setMobileMenuOpen(false);
   };
 
+  const handleQuoteSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!privacyConsent) {
+      setPrivacyConsentTouched(true);
+      return;
+    }
+
+    const data = new FormData(e.currentTarget);
+
+    const firstName = String(data.get('firstName') ?? '').trim();
+    const lastName = String(data.get('lastName') ?? '').trim();
+    const email = String(data.get('email') ?? '').trim();
+    const phone = String(data.get('phone') ?? '').trim();
+    const service = String(data.get('service') ?? selectedService).trim();
+    const qtyDetails = String(data.get('qtyDetails') ?? '').trim();
+    const deliveryPlace = String(data.get('deliveryPlace') ?? '').trim();
+    const preferredDate = String(data.get('preferredDate') ?? '').trim();
+    const timeSlot = String(data.get('timeSlot') ?? '').trim();
+    const message = String(data.get('message') ?? '').trim();
+
+    setQuoteStatus('sending');
+    setQuoteError(null);
+
+    try {
+      const response = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          service,
+          message,
+          selectedProducts,
+          selectedWeights,
+          qtyDetails,
+          deliveryPlace,
+          preferredDate,
+          timeSlot,
+          lang,
+        }),
+      });
+
+      if (!response.ok) {
+        const result = (await response.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(result?.error || 'Errore durante l’invio.');
+      }
+
+      setQuoteStatus('success');
+      e.currentTarget.reset();
+      setSelectedProducts([]);
+      setSelectedWeights([]);
+      setSelectedService('Trasporto Combustibili (ADR)');
+      setPrivacyConsent(false);
+      setPrivacyConsentTouched(false);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Errore durante l’invio.';
+      setQuoteStatus('error');
+      setQuoteError(message);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navigation */}
@@ -1173,7 +1254,7 @@ function App() {
                   />
                 </div>
                 <span
-                  className="inline-flex items-end h-7 sm:h-10 md:h-12 lg:h-[4rem] text-[1.18rem] sm:text-[1.6rem] md:text-[1.75rem] lg:text-[2.05rem] text-black font-extrabold italic leading-none -translate-y-[2px] sm:translate-y-[2px] shrink-0 whitespace-nowrap"
+                  className="inline-flex items-end h-7 sm:h-10 md:h-12 lg:h-[4rem] text-[1.18rem] sm:text-[1.6rem] md:text-[1.75rem] lg:text-[2.05rem] text-black font-extrabold italic leading-none -translate-y-[2px] sm:translate-y-[2px] md:-translate-y-[14px] shrink-0 whitespace-nowrap"
                   style={{
                     fontFamily: '"Torcao Condensed", system-ui, sans-serif',
                     filter:
@@ -2107,18 +2188,14 @@ function App() {
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">{t('form_title')}</h3>
               <form
                 className="space-y-6"
-                onSubmit={(e) => {
-                  if (!privacyConsent) {
-                    e.preventDefault();
-                    setPrivacyConsentTouched(true);
-                  }
-                }}
+                onSubmit={handleQuoteSubmit}
               >
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">{t('form_name')} *</label>
                     <input
                       type="text"
+                      name="firstName"
                       required
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 outline-none transition-all bg-white"
                       placeholder={t('placeholder_name')}
@@ -2128,6 +2205,7 @@ function App() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">{t('form_surname')} *</label>
                     <input
                       type="text"
+                      name="lastName"
                       required
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 outline-none transition-all bg-white"
                       placeholder={t('placeholder_surname')}
@@ -2139,6 +2217,7 @@ function App() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">{t('form_email')} *</label>
                   <input
                     type="email"
+                    name="email"
                     required
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 outline-none transition-all bg-white"
                     placeholder={t('placeholder_email')}
@@ -2149,6 +2228,7 @@ function App() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">{t('form_phone')} *</label>
                   <input
                     type="tel"
+                    name="phone"
                     required
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 outline-none transition-all bg-white"
                     placeholder={t('placeholder_phone')}
@@ -2158,6 +2238,7 @@ function App() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">{t('form_service')}</label>
                   <select 
+                    name="service"
                     value={selectedService}
                     onChange={(e) => setSelectedService(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 outline-none transition-all bg-white"
@@ -2215,6 +2296,7 @@ function App() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">{t('qty_details_label')}</label>
                         <input
                           type="text"
+                          name="qtyDetails"
                           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 outline-none bg-white text-sm"
                           placeholder={t('qty_details_placeholder')}
                         />
@@ -2223,6 +2305,7 @@ function App() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">{t('delivery_place_label')}</label>
                         <input
                           type="text"
+                          name="deliveryPlace"
                           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 outline-none bg-white text-sm"
                           placeholder={t('delivery_place_placeholder')}
                         />
@@ -2234,6 +2317,7 @@ function App() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">{t('preferred_date_label')}</label>
                         <input
                           type="date"
+                          name="preferredDate"
                           min={todayMinDate}
                           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 outline-none bg-white text-sm"
                         />
@@ -2242,6 +2326,7 @@ function App() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">{t('time_slot_label')}</label>
                         <input
                           type="time"
+                          name="timeSlot"
                           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 outline-none bg-white text-sm"
                         />
                       </div>
@@ -2252,6 +2337,7 @@ function App() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">{t('message_label')}</label>
                   <textarea
+                    name="message"
                     rows={4}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 outline-none transition-all resize-none bg-white"
                     placeholder={t('message_placeholder')}
@@ -2290,14 +2376,25 @@ function App() {
 
                 <button
                   type="submit"
-                  disabled={!privacyConsent}
+                  disabled={!privacyConsent || quoteStatus === 'sending'}
                   className={`w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 ${
-                    privacyConsent ? 'hover:shadow-lg' : 'opacity-50 cursor-not-allowed'
+                    privacyConsent && quoteStatus !== 'sending' ? 'hover:shadow-lg' : 'opacity-50 cursor-not-allowed'
                   }`}
                 >
-                  {t('send_request')}
+                  {quoteStatus === 'sending' ? t('quote_sending') : t('send_request')}
                   <Send className="w-5 h-5" />
                 </button>
+
+                {quoteStatus === 'success' && (
+                  <div className="text-sm text-green-700 font-semibold text-center">
+                    {t('quote_success')}
+                  </div>
+                )}
+                {quoteStatus === 'error' && (
+                  <div className="text-sm text-red-600 font-semibold text-center">
+                    {quoteError ?? t('quote_error')}
+                  </div>
+                )}
 
                 <p className="text-sm text-gray-500 text-center">
                   {t('reply_time')}
