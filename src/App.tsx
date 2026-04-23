@@ -1241,27 +1241,16 @@ function App() {
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border-2 border-black overflow-hidden flex items-center justify-center shadow-lg flex-shrink-0">
                 <img src="/logo.png" alt="Mazzucotelli Petroli Logo" className="w-full h-full object-cover" />
               </div>
-              <div className="flex items-center gap-1 sm:gap-2 leading-none min-w-0">
-                <div className="h-7 sm:h-10 md:h-12 lg:h-[4rem] max-w-[120px] sm:max-w-[200px] shrink min-w-0">
-                  <img
-                    src="/font-preview.png"
-                    alt="Mazzucotelli"
-                    className="h-full w-auto object-contain"
-                    style={{
-                      filter:
-                        'drop-shadow(1px 0 0 rgba(255,255,255,0.4)) drop-shadow(-1px 0 0 rgba(255,255,255,0.4)) drop-shadow(0 1px 0 rgba(255,255,255,0.4)) drop-shadow(0 -1px 0 rgba(255,255,255,0.4))',
-                    }}
-                  />
-                </div>
+              <div className="flex items-center leading-none min-w-0">
                 <span
-                  className="inline-flex items-end h-7 sm:h-10 md:h-12 lg:h-[4rem] text-[1.18rem] sm:text-[1.6rem] md:text-[1.75rem] lg:text-[2.05rem] text-black font-extrabold italic leading-none -translate-y-[2px] sm:translate-y-[2px] md:-translate-y-[14px] shrink-0 whitespace-nowrap"
+                  className="inline-flex items-center h-7 sm:h-10 md:h-12 lg:h-[4rem] text-[1.35rem] sm:text-[2.0rem] md:text-[2.25rem] lg:text-[2.6rem] text-black font-extrabold italic leading-none shrink min-w-0 whitespace-nowrap translate-y-[1px] sm:translate-y-0"
                   style={{
                     fontFamily: '"Torcao Condensed", system-ui, sans-serif',
                     filter:
                       'drop-shadow(1px 0 0 rgba(255,255,255,0.38)) drop-shadow(-1px 0 0 rgba(255,255,255,0.38)) drop-shadow(0 1px 0 rgba(255,255,255,0.38)) drop-shadow(0 -1px 0 rgba(255,255,255,0.38))',
                   }}
                 >
-                  Petroli
+                  Mazzucotelli Petroli
                 </span>
               </div>
             </div>
@@ -1391,27 +1380,16 @@ function App() {
           </Reveal>
 
           <Reveal delayMs={80}>
-            <h1 className="mb-6 font-bold text-white flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 sm:gap-x-4 leading-none">
-              <span className="inline-flex items-end justify-center shrink-0 h-8 sm:h-10 md:h-12 lg:h-[4rem]">
-                <img
-                  src="/font-preview.png"
-                  alt="Mazzucotelli"
-                  className="h-full w-auto max-w-[85vw] object-contain"
-                  style={{
-                    filter:
-                      'drop-shadow(2px 0 0 rgba(255,255,255,0.4)) drop-shadow(-2px 0 0 rgba(255,255,255,0.4)) drop-shadow(0 2px 0 rgba(255,255,255,0.4)) drop-shadow(0 -2px 0 rgba(255,255,255,0.4))',
-                  }}
-                />
-              </span>
+            <h1 className="mb-6 font-bold text-white flex items-center justify-center leading-none">
               <span
-                className="inline-flex items-end h-8 sm:h-10 md:h-12 lg:h-[4rem] text-[1.85rem] sm:text-[3.05rem] md:text-[3.6rem] lg:text-[4.8rem] text-black font-extrabold italic leading-none translate-y-[4px] sm:translate-y-[7px]"
+                className="inline-flex items-end h-8 sm:h-10 md:h-12 lg:h-[4rem] text-[2.25rem] sm:text-[3.6rem] md:text-[4.3rem] lg:text-[5.45rem] text-black font-extrabold italic leading-none whitespace-nowrap"
                 style={{
                   fontFamily: '"Torcao Condensed", system-ui, sans-serif',
                   filter:
                     'drop-shadow(2px 0 0 rgba(255,255,255,0.4)) drop-shadow(-2px 0 0 rgba(255,255,255,0.4)) drop-shadow(0 2px 0 rgba(255,255,255,0.4)) drop-shadow(0 -2px 0 rgba(255,255,255,0.4))',
                 }}
               >
-                Petroli
+                Mazzucotelli Petroli
               </span>
             </h1>
           </Reveal>
